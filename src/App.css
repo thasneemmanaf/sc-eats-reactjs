@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;800&display=swap");
+:root {
+  --green-brand: #06c167;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fff;
+  color: #000;
+  font-family: "Raleway", sans-serif;
+}
+
+.App {
+  padding: 1rem;
+}
+
+.App header {
+  display: flex;
+  flex-direction: row;
+}
+
+.searchFood {
+  display: flex;
+  align-items: center;
+}
+.searchFood > div {
+  margin-bottom: 0px;
+}
+
+.App nav {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.25em;
+}
+
+.actions {
+  margin: 0.35rem;
+  display: flex;
+  height: 24px;
+  position: relative;
+}
+
+.actions button {
+  border-radius: 50px;
+  padding: 8px 12px;
+  background: #eee;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+}
+
+.actions span:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.actions span {
+  margin-right: 0.25rem;
+}
+
+.actions .button-group > div {
+  background: #fff;
+  margin-top: 1em;
+  width: 200px;
+  position: absolute;
+  top: 20px;
+  border: none;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions .button-group div > label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 0.35rem;
+}
+
+.actions .button-group .buttons {
+  display: flex;
+  min-width: 450px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 0.35rem;
+}
+
+.cz {
+  width: 24px;
+}
+
+.cs {
+  height: 24px;
+}
+.b4 {
+  flex: none;
+}
+
+.ft {
+  fill: rgb(0, 0, 0);
+}
+
+.restaurants {
+  width: 90vw;
+  margin: 0 auto;
+  padding: 2em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.restaurants section {
+  border-bottom: 1px solid #ccc;
+  max-height: 335px;
+  height: 100%;
+}
+.restaurants section .description {
+  font-size: 0.85em;
+  line-height: 1.2;
+}
+.restaurants section img {
+  height: 250px;
+  width: 350px;
+}
+
+.shadow {
+  box-shadow: 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
