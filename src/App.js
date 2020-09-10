@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Actions from "./Actions";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -8,13 +8,11 @@ import data from "./data.json";
 library.add(faChevronDown);
 
 function App() {
-  console.log("app");
   const [restaurants, setRestaurants] = useState([]);
 
   // Explore effect! (for classfull, this was related to componentWillMount, componentDidMount side effects) )
   React.useEffect(() => {
     setRestaurants(data.restarants);
-    console.log("app-useEffect");
   }, []);
 
   const [restuarantName, setName] = useState("");

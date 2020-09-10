@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // read: https://fontawesome.com/how-to-use/on-the-web/using-with/react
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import data from "./data.json";
 
 const Actions = (props) => {
   const { setRestaurants } = props;
-  console.log("action");
+
   const [showSortSelector, setSortSelector] = useState(false);
   const [showPriceRangeSelector, setPriceRangeSelector] = useState(false);
   const [showDietaryChoiceSelector, setDietaryChoiceSelector] = useState(false);
@@ -42,23 +42,22 @@ const Actions = (props) => {
     restaurants.forEach((restaurant) => {
       restaurant.menu.forEach((menuItem) => {
         menuItem.items.forEach((item) => {
-          if (typeOfFilter == "priceFilter") {
+          if (typeOfFilter === "priceFilter") {
             const [selectedMinPrice, selectedMaxPrice] = getMinAndMaxPrice(
               selection
             );
             if (
               item.price >= selectedMinPrice &&
-              item.price <= selectedMaxPrice
+              item.price <= selectedMaxPrice &&
+              !filteredRestaurantIds.includes(restaurant.id) // To avoid adding duplicate resturant entries
             ) {
-              if (!filteredRestaurantIds.includes(restaurant.id)) {
-                filteredRestaurantIds.push(restaurant.id);
-                filteredRestaurants.push(restaurant);
-              }
+              filteredRestaurantIds.push(restaurant.id);
+              filteredRestaurants.push(restaurant);
             }
-          } else if (typeOfFilter == "dietaryFilter") {
+          } else if (typeOfFilter === "dietaryFilter") {
             if (
               selection.includes(item.typeOfMeal) &&
-              !filteredRestaurantIds.includes(restaurant.id)
+              !filteredRestaurantIds.includes(restaurant.id) // To avoid adding duplicate resturant entries
             ) {
               filteredRestaurantIds.push(restaurant.id);
               filteredRestaurants.push(restaurant);
@@ -67,6 +66,7 @@ const Actions = (props) => {
         });
       });
     });
+
     setRestaurants(filteredRestaurants);
   };
 
@@ -116,6 +116,7 @@ const Actions = (props) => {
         newSelection.splice(index, 1);
       }
     }
+
     setDietarySelections(newSelection);
     handleGeneralFiltering(restaurants, newSelection, selection.name);
   };
