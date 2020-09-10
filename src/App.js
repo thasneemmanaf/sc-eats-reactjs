@@ -8,11 +8,13 @@ import data from "./data.json";
 library.add(faChevronDown);
 
 function App() {
+  console.log("app");
   const [restaurants, setRestaurants] = useState([]);
 
   // Explore effect! (for classfull, this was related to componentWillMount, componentDidMount side effects) )
   React.useEffect(() => {
     setRestaurants(data.restarants);
+    console.log("app-useEffect");
   }, []);
 
   const [restuarantName, setName] = useState("");

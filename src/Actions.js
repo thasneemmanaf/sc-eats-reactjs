@@ -5,7 +5,7 @@ import data from "./data.json";
 
 const Actions = (props) => {
   const { setRestaurants } = props;
-
+  console.log("action");
   const [showSortSelector, setSortSelector] = useState(false);
   const [showPriceRangeSelector, setPriceRangeSelector] = useState(false);
   const [showDietaryChoiceSelector, setDietaryChoiceSelector] = useState(false);
@@ -32,12 +32,9 @@ const Actions = (props) => {
     setSortSelector(false);
   };
 
-  // Filter restaurants based on price range
-  const filterRestaurants = (
-    restaurants,
-    selectedMinPrice,
-    selectedMaxPrice
-  ) => {
+  // Filter restaurants based on Price/Dietary choice
+  const handleGeneralFiltering = (restaurants, selection, typeOfFilter) => {
+    restaurants = data.restarants;
     let filteredRestaurants = [];
     let filteredRestaurantIds = [];
 
@@ -45,11 +42,24 @@ const Actions = (props) => {
     restaurants.forEach((restaurant) => {
       restaurant.menu.forEach((menuItem) => {
         menuItem.items.forEach((item) => {
-          if (
-            item.price >= selectedMinPrice &&
-            item.price <= selectedMaxPrice
-          ) {
-            if (!filteredRestaurantIds.includes(restaurant.id)) {
+          if (typeOfFilter == "priceFilter") {
+            const [selectedMinPrice, selectedMaxPrice] = getMinAndMaxPrice(
+              selection
+            );
+            if (
+              item.price >= selectedMinPrice &&
+              item.price <= selectedMaxPrice
+            ) {
+              if (!filteredRestaurantIds.includes(restaurant.id)) {
+                filteredRestaurantIds.push(restaurant.id);
+                filteredRestaurants.push(restaurant);
+              }
+            }
+          } else if (typeOfFilter == "dietaryFilter") {
+            if (
+              selection.includes(item.typeOfMeal) &&
+              !filteredRestaurantIds.includes(restaurant.id)
+            ) {
               filteredRestaurantIds.push(restaurant.id);
               filteredRestaurants.push(restaurant);
             }
@@ -57,30 +67,6 @@ const Actions = (props) => {
         });
       });
     });
-    setRestaurants(filteredRestaurants);
-  };
-
-  // Filter restaurants based on Dietary choice
-  const filterRestaurantsDietary = (restaurants, dietarySelections) => {
-    restaurants = data.restarants;
-    let filteredRestaurants = [];
-    let filteredRestaurantIds = [];
-    // Get filtered restaurants and corresponding ids
-    restaurants.forEach((restaurant) => {
-      restaurant.menu.forEach((menuItem) => {
-        menuItem.items.forEach((item) => {
-          if (
-            dietarySelections.includes(item.typeOfMeal) &&
-            !filteredRestaurantIds.includes(restaurant.id)
-          ) {
-            filteredRestaurantIds.push(restaurant.id);
-            filteredRestaurants.push(restaurant);
-          }
-        });
-      });
-    });
-    console.log(filteredRestaurants);
-    console.log(filteredRestaurantIds);
     setRestaurants(filteredRestaurants);
   };
 
@@ -108,6 +94,7 @@ const Actions = (props) => {
 
   //  Sort button: To sort restaurants based on popularity,rating and delivery time
   const handeGeneralSorting = (restaurants, sortBy) => {
+    restaurants = data.restarants;
     let func;
     if (sortBy === "maxDeliveryTime") {
       func = (a, b) => a[sortBy] - b[sortBy]; // not that easy?
@@ -130,14 +117,13 @@ const Actions = (props) => {
       }
     }
     setDietarySelections(newSelection);
-    filterRestaurantsDietary(restaurants, newSelection);
+    handleGeneralFiltering(restaurants, newSelection, selection.name);
   };
 
   //  Price Range button: To filter restaurants based on price range
-  const handlePriceFiltering = (restaurants, priceRange) => {
-    restaurants = data.restarants;
-    const [selectedMinPrice, selectedMaxPrice] = getMinAndMaxPrice(priceRange);
-    filterRestaurants(restaurants, selectedMinPrice, selectedMaxPrice);
+  const handlePriceFiltering = (restaurants, selection) => {
+    const priceRange = selection.value;
+    handleGeneralFiltering(restaurants, priceRange, selection.name);
   };
 
   return (
@@ -206,44 +192,36 @@ const Actions = (props) => {
           <div className="buttons">
             <button
               value="$"
+              name="priceFilter"
               onClick={(event) =>
-                handlePriceFiltering(
-                  props.restaurants,
-                  event.currentTarget.value
-                )
+                handlePriceFiltering(props.restaurants, event.currentTarget)
               }
             >
               $
             </button>
             <button
               value="$$"
+              name="priceFilter"
               onClick={(event) =>
-                handlePriceFiltering(
-                  props.restaurants,
-                  event.currentTarget.value
-                )
+                handlePriceFiltering(props.restaurants, event.currentTarget)
               }
             >
               $$
             </button>
             <button
               value="$$$"
+              name="priceFilter"
               onClick={(event) =>
-                handlePriceFiltering(
-                  props.restaurants,
-                  event.currentTarget.value
-                )
+                handlePriceFiltering(props.restaurants, event.currentTarget)
               }
             >
               $$$
             </button>
             <button
               value="$$$$"
+              name="priceFilter"
               onClick={(event) =>
-                handlePriceFiltering(
-                  props.restaurants,
-                  event.currentTarget.value
-                )
+                handlePriceFiltering(props.restaurants, event.currentTarget)
               }
             >
               $$$$
@@ -264,7 +242,7 @@ const Actions = (props) => {
               <input
                 value="vegetarian"
                 type="checkbox"
-                name="generalFilter"
+                name="dietaryFilter"
                 onChange={(event) =>
                   handleDietaryFiltering(props.restaurants, event.currentTarget)
                 }
@@ -275,7 +253,7 @@ const Actions = (props) => {
               <input
                 value="vegan"
                 type="checkbox"
-                name="generalFilter"
+                name="dietaryFilter"
                 onChange={(event) =>
                   handleDietaryFiltering(props.restaurants, event.currentTarget)
                 }
@@ -286,7 +264,7 @@ const Actions = (props) => {
               <input
                 value="non vegan"
                 type="checkbox"
-                name="generalFilter"
+                name="dietaryFilter"
                 onChange={(event) =>
                   handleDietaryFiltering(props.restaurants, event.currentTarget)
                 }
